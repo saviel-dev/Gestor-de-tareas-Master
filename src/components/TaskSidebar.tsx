@@ -87,7 +87,7 @@ export function TaskSidebar({ activeFilter, onFilterChange, taskStats }: TaskSid
         {/* Footer */}
         <div className="p-4 border-t border-ms-gray-200 dark:border-ms-gray-700 bg-white dark:bg-ms-gray-800">
           <div className="text-xs text-ms-gray-500 dark:text-ms-gray-400 text-center">
-            Task Master v1.0
+            Gestor de tareas JH
           </div>
         </div>
       </div>
