@@ -61,18 +61,18 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 animate-fade-in">
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-ms-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4 animate-fade-in border border-ms-gray-200 dark:border-ms-gray-700">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-ms-gray-200">
-          <h2 className="text-lg font-semibold text-ms-gray-900">
+        <div className="flex items-center justify-between p-6 border-b border-ms-gray-200 dark:border-ms-gray-700">
+          <h2 className="text-lg font-semibold text-ms-gray-900 dark:text-ms-gray-100">
             {editingTask ? 'Editar tarea' : 'Nueva tarea'}
           </h2>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="h-8 w-8 p-0 text-ms-gray-500 hover:text-ms-gray-700"
+            className="h-8 w-8 p-0 text-ms-gray-500 hover:text-ms-gray-700 dark:text-ms-gray-400 dark:hover:text-ms-gray-200"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -81,7 +81,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-ms-gray-700 mb-2">
+            <label htmlFor="title" className="block text-sm font-medium text-ms-gray-700 dark:text-ms-gray-300 mb-2">
               Título *
             </label>
             <Input
@@ -89,13 +89,13 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="¿Qué necesitas hacer?"
-              className="w-full border-ms-gray-300 focus:border-ms-blue-500 focus:ring-ms-blue-500"
+              className="w-full border-ms-gray-300 dark:border-ms-gray-600 dark:bg-ms-gray-700 dark:text-ms-gray-100 focus:border-ms-blue-500 focus:ring-ms-blue-500"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-ms-gray-700 mb-2">
+            <label htmlFor="description" className="block text-sm font-medium text-ms-gray-700 dark:text-ms-gray-300 mb-2">
               Descripción
             </label>
             <Textarea
@@ -104,30 +104,30 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Agrega más detalles..."
               rows={3}
-              className="w-full border-ms-gray-300 focus:border-ms-blue-500 focus:ring-ms-blue-500"
+              className="w-full border-ms-gray-300 dark:border-ms-gray-600 dark:bg-ms-gray-700 dark:text-ms-gray-100 focus:border-ms-blue-500 focus:ring-ms-blue-500"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-ms-gray-700 mb-2">
+              <label htmlFor="priority" className="block text-sm font-medium text-ms-gray-700 dark:text-ms-gray-300 mb-2">
                 <Flag className="w-4 h-4 inline mr-1" />
                 Prioridad
               </label>
               <Select value={formData.priority} onValueChange={(value: 'low' | 'medium' | 'high') => setFormData({ ...formData, priority: value })}>
-                <SelectTrigger className="w-full border-ms-gray-300 focus:border-ms-blue-500 focus:ring-ms-blue-500">
+                <SelectTrigger className="w-full border-ms-gray-300 dark:border-ms-gray-600 dark:bg-ms-gray-700 dark:text-ms-gray-100 focus:border-ms-blue-500 focus:ring-ms-blue-500">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Baja</SelectItem>
-                  <SelectItem value="medium">Media</SelectItem>
-                  <SelectItem value="high">Alta</SelectItem>
+                <SelectContent className="dark:bg-ms-gray-700 dark:border-ms-gray-600">
+                  <SelectItem value="low" className="dark:text-ms-gray-100 dark:focus:bg-ms-gray-600">Baja</SelectItem>
+                  <SelectItem value="medium" className="dark:text-ms-gray-100 dark:focus:bg-ms-gray-600">Media</SelectItem>
+                  <SelectItem value="high" className="dark:text-ms-gray-100 dark:focus:bg-ms-gray-600">Alta</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div>
-              <label htmlFor="dueDate" className="block text-sm font-medium text-ms-gray-700 mb-2">
+              <label htmlFor="dueDate" className="block text-sm font-medium text-ms-gray-700 dark:text-ms-gray-300 mb-2">
                 <Calendar className="w-4 h-4 inline mr-1" />
                 Fecha límite
               </label>
@@ -136,7 +136,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
                 type="date"
                 value={formData.dueDate}
                 onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-                className="w-full border-ms-gray-300 focus:border-ms-blue-500 focus:ring-ms-blue-500"
+                className="w-full border-ms-gray-300 dark:border-ms-gray-600 dark:bg-ms-gray-700 dark:text-ms-gray-100 focus:border-ms-blue-500 focus:ring-ms-blue-500"
                 min={new Date().toISOString().split('T')[0]}
               />
             </div>
@@ -148,7 +148,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1 border-ms-gray-300 text-ms-gray-700 hover:bg-ms-gray-50"
+              className="flex-1 border-ms-gray-300 text-ms-gray-700 hover:bg-ms-gray-50 dark:border-ms-gray-600 dark:text-ms-gray-300 dark:hover:bg-ms-gray-700"
             >
               Cancelar
             </Button>

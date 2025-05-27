@@ -1,9 +1,11 @@
 
-import { Home, CheckSquare, Calendar, Archive, Settings, Plus } from "lucide-react";
+import { Home, CheckSquare, Calendar, Archive, Settings, Plus, Share } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { Settings as SettingsModal } from "./Settings";
+import { ShareTasksModal } from "./ShareTasksModal";
+import { Task } from "./TaskList";
 
 interface TaskSidebarProps {
   activeFilter: string;
@@ -13,10 +15,12 @@ interface TaskSidebarProps {
     pending: number;
     completed: number;
   };
+  tasks: Task[];
 }
 
-export function TaskSidebar({ activeFilter, onFilterChange, taskStats }: TaskSidebarProps) {
+export function TaskSidebar({ activeFilter, onFilterChange, taskStats, tasks }: TaskSidebarProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   const menuItems = [
     { id: 'all', label: 'Todas las tareas', icon: Home, count: taskStats.total },
@@ -74,6 +78,19 @@ export function TaskSidebar({ activeFilter, onFilterChange, taskStats }: TaskSid
 
           <Separator className="my-6 bg-ms-gray-200 dark:bg-ms-gray-700" />
 
+          {/* Share Section */}
+          <div className="mb-6">
+            <button 
+              onClick={() => setIsShareModalOpen(true)}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-left rounded-lg text-ms-gray-700 hover:bg-ms-gray-100 dark:text-ms-gray-300 dark:hover:bg-ms-gray-800 transition-all duration-200"
+            >
+              <Share className="w-4 h-4" />
+              <span className="font-medium">Compartir tareas</span>
+            </button>
+          </div>
+
+          <Separator className="my-6 bg-ms-gray-200 dark:bg-ms-gray-700" />
+
           {/* Settings */}
           <button 
             onClick={() => setIsSettingsOpen(true)}
@@ -95,6 +112,12 @@ export function TaskSidebar({ activeFilter, onFilterChange, taskStats }: TaskSid
       <SettingsModal 
         isOpen={isSettingsOpen} 
         onClose={() => setIsSettingsOpen(false)} 
+      />
+
+      <ShareTasksModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        tasks={tasks}
       />
     </>
   );

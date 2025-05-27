@@ -143,6 +143,7 @@ export function TaskManager() {
           activeFilter={activeFilter}
           onFilterChange={setActiveFilter}
           taskStats={taskStats}
+          tasks={tasks}
         />
         
         <div className="flex-1 flex flex-col">
