@@ -7,6 +7,7 @@ import { TaskSidebar } from "./TaskSidebar";
 import { TaskList, Task } from "./TaskList";
 import { TaskForm } from "./TaskForm";
 import { toast } from "@/hooks/use-toast";
+import { ThemeProvider } from "@/hooks/use-theme";
 
 export function TaskManager() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -136,64 +137,66 @@ export function TaskManager() {
   };
 
   return (
-    <div className="flex h-screen bg-ms-gray-50">
-      <TaskSidebar
-        activeFilter={activeFilter}
-        onFilterChange={setActiveFilter}
-        taskStats={taskStats}
-      />
-      
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white border-b border-ms-gray-200 p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-2xl font-semibold text-ms-gray-900">
-                {activeFilter === 'all' && 'Todas las tareas'}
-                {activeFilter === 'pending' && 'Tareas pendientes'}
-                {activeFilter === 'completed' && 'Tareas completadas'}
-              </h1>
-              <p className="text-ms-gray-600 mt-1">
-                {taskStats.pending} pendientes, {taskStats.completed} completadas
-              </p>
+    <ThemeProvider defaultTheme="system" storageKey="task-manager-theme">
+      <div className="flex h-screen bg-ms-gray-50 dark:bg-ms-gray-900">
+        <TaskSidebar
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+          taskStats={taskStats}
+        />
+        
+        <div className="flex-1 flex flex-col">
+          {/* Header */}
+          <div className="bg-white dark:bg-ms-gray-800 border-b border-ms-gray-200 dark:border-ms-gray-700 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="text-2xl font-semibold text-ms-gray-900 dark:text-ms-gray-100">
+                  {activeFilter === 'all' && 'Todas las tareas'}
+                  {activeFilter === 'pending' && 'Tareas pendientes'}
+                  {activeFilter === 'completed' && 'Tareas completadas'}
+                </h1>
+                <p className="text-ms-gray-600 dark:text-ms-gray-400 mt-1">
+                  {taskStats.pending} pendientes, {taskStats.completed} completadas
+                </p>
+              </div>
+              <Button
+                onClick={() => setIsFormOpen(true)}
+                className="bg-ms-blue-500 hover:bg-ms-blue-600 text-white shadow-sm"
+              >
+                Nueva tarea
+              </Button>
             </div>
-            <Button
-              onClick={() => setIsFormOpen(true)}
-              className="bg-ms-blue-500 hover:bg-ms-blue-600 text-white shadow-sm"
-            >
-              Nueva tarea
-            </Button>
+            
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-ms-gray-400 w-4 h-4" />
+              <Input
+                placeholder="Buscar tareas..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 border-ms-gray-300 focus:border-ms-blue-500 focus:ring-ms-blue-500 dark:border-ms-gray-600 dark:bg-ms-gray-700 dark:text-ms-gray-100"
+              />
+            </div>
           </div>
-          
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-ms-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Buscar tareas..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 border-ms-gray-300 focus:border-ms-blue-500 focus:ring-ms-blue-500"
-            />
-          </div>
+
+          {/* Task List */}
+          <TaskList
+            tasks={filteredTasks}
+            onTaskToggle={handleTaskToggle}
+            onTaskDelete={handleTaskDelete}
+            onTaskEdit={handleEditClick}
+            filter={activeFilter}
+          />
         </div>
 
-        {/* Task List */}
-        <TaskList
-          tasks={filteredTasks}
-          onTaskToggle={handleTaskToggle}
-          onTaskDelete={handleTaskDelete}
-          onTaskEdit={handleEditClick}
-          filter={activeFilter}
+        {/* Task Form Modal */}
+        <TaskForm
+          isOpen={isFormOpen}
+          onClose={handleFormClose}
+          onSubmit={editingTask ? handleEditTask : handleAddTask}
+          editingTask={editingTask}
         />
       </div>
-
-      {/* Task Form Modal */}
-      <TaskForm
-        isOpen={isFormOpen}
-        onClose={handleFormClose}
-        onSubmit={editingTask ? handleEditTask : handleAddTask}
-        editingTask={editingTask}
-      />
-    </div>
+    </ThemeProvider>
   );
 }
