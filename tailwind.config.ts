@@ -42,8 +42,8 @@ export default {
 					500: '#6b7280',
 					600: '#4b5563',
 					700: '#374151',
-					800: '#1f2937',
-					900: '#111827',
+					800: '#1a1d29', // Mejorado para mejor contraste
+					900: '#0f1419', // Más oscuro para mayor profundidad
 				},
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
