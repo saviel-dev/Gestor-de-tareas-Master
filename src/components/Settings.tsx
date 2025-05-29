@@ -1,5 +1,5 @@
 
-import { X, Monitor, Moon, Sun } from "lucide-react";
+import { X, Monitor, Moon, Sun, Palette } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -55,6 +55,20 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 <Moon className="h-4 w-4 text-ms-gray-600" />
                 <Label htmlFor="dark" className="flex-1 cursor-pointer">
                   Oscuro
+                </Label>
+              </div>
+              <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-ms-gray-50 dark:hover:bg-ms-gray-800 transition-colors">
+                <RadioGroupItem value="purple" id="purple" />
+                <div className="h-4 w-4 bg-purple-500 rounded-full" />
+                <Label htmlFor="purple" className="flex-1 cursor-pointer">
+                  Morado
+                </Label>
+              </div>
+              <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-ms-gray-50 dark:hover:bg-ms-gray-800 transition-colors">
+                <RadioGroupItem value="blue" id="blue" />
+                <div className="h-4 w-4 bg-blue-600 rounded-full" />
+                <Label htmlFor="blue" className="flex-1 cursor-pointer">
+                  Azul
                 </Label>
               </div>
               <div className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-ms-gray-50 dark:hover:bg-ms-gray-800 transition-colors">

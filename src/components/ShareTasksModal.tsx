@@ -33,17 +33,17 @@ export function ShareTasksModal({ isOpen, onClose, tasks }: ShareTasksModalProps
 
   const handleSendWhatsApp = () => {
     const selectedTasksList = tasks.filter(task => selectedTasks.includes(task.id));
-    let message = "📋 *Tareas compartidas:*\n\n";
+    let message = "*Tareas compartidas:*\n\n";
     
     selectedTasksList.forEach((task, index) => {
-      const priorityIcon = task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢';
-      const status = task.completed ? '✅' : '⏳';
-      message += `${index + 1}. ${status} ${priorityIcon} *${task.title}*\n`;
+      const priorityText = task.priority === 'high' ? '[ALTA]' : task.priority === 'medium' ? '[MEDIA]' : '[BAJA]';
+      const status = task.completed ? '[COMPLETADA]' : '[PENDIENTE]';
+      message += `${index + 1}. ${status} ${priorityText} *${task.title}*\n`;
       if (task.description) {
-        message += `   📝 ${task.description}\n`;
+        message += `   Descripcion: ${task.description}\n`;
       }
       if (task.dueDate) {
-        message += `   📅 Fecha límite: ${new Date(task.dueDate).toLocaleDateString()}\n`;
+        message += `   Fecha limite: ${new Date(task.dueDate).toLocaleDateString()}\n`;
       }
       message += '\n';
     });
