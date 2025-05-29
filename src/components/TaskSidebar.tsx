@@ -5,7 +5,16 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { Settings as SettingsModal } from "./Settings";
 import { ShareTasksModal } from "./ShareTasksModal";
-import { Task } from "./TaskList";
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  priority: "low" | "medium" | "high";
+  dueDate?: string;
+  completed: boolean;
+  createdAt: string;
+}
 
 interface TaskSidebarProps {
   activeFilter: string;
@@ -16,9 +25,10 @@ interface TaskSidebarProps {
     completed: number;
   };
   tasks: Task[];
+  onAddTask?: () => void;
 }
 
-export function TaskSidebar({ activeFilter, onFilterChange, taskStats, tasks }: TaskSidebarProps) {
+export function TaskSidebar({ activeFilter, onFilterChange, taskStats, tasks, onAddTask }: TaskSidebarProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
@@ -40,6 +50,7 @@ export function TaskSidebar({ activeFilter, onFilterChange, taskStats, tasks }: 
             <h1 className="text-xl font-semibold text-ms-gray-900 dark:text-ms-gray-100">Task Master</h1>
           </div>
           <Button 
+            onClick={onAddTask}
             className="w-full bg-ms-blue-500 hover:bg-ms-blue-600 text-white rounded-lg shadow-sm transition-all duration-200"
             size="sm"
           >

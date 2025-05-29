@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { TaskForm } from "./TaskForm";
 import { TaskList } from "./TaskList";
@@ -12,7 +13,7 @@ export interface Task {
   description: string;
   priority: "low" | "medium" | "high";
   dueDate?: string;
-  status: "pending" | "in-progress" | "completed";
+  completed: boolean;
   createdAt: string;
 }
 
@@ -22,9 +23,15 @@ export function TaskManager() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
 
-  const handleAddTask = (task: Task) => {
-    setTasks([...tasks, task]);
+  const handleAddTask = (taskData: Omit<Task, 'id' | 'createdAt'>) => {
+    const newTask: Task = {
+      ...taskData,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString()
+    };
+    setTasks([...tasks, newTask]);
   };
 
   const handleEditTask = (task: Task) => {
@@ -36,54 +43,63 @@ export function TaskManager() {
     setTasks(tasks.filter((task) => task.id !== taskId));
   };
 
-  const handleFormSubmit = (task: Task) => {
+  const handleFormSubmit = (taskData: Omit<Task, 'id' | 'createdAt'>) => {
     if (editingTask) {
       // Update existing task
       setTasks(
-        tasks.map((t) => (t.id === editingTask.id ? task : t))
+        tasks.map((t) => (t.id === editingTask.id ? { ...taskData, id: editingTask.id, createdAt: editingTask.createdAt } : t))
       );
       setEditingTask(null);
     } else {
       // Add new task
-      handleAddTask(task);
+      handleAddTask(taskData);
     }
     setIsFormOpen(false);
   };
 
-  const handleStatusChange = (taskId: string, status: Task["status"]) => {
+  const handleTaskToggle = (taskId: string) => {
     setTasks(
       tasks.map((task) =>
-        task.id === taskId ? { ...task, status: status } : task
+        task.id === taskId ? { ...task, completed: !task.completed } : task
       )
     );
+  };
+
+  const getTaskStats = () => {
+    const total = tasks.length;
+    const completed = tasks.filter(task => task.completed).length;
+    const pending = total - completed;
+    
+    return { total, completed, pending };
   };
 
   return (
     <ThemeProvider defaultMode="system" defaultColor="default" storageKey="task-manager-theme">
       <div className="flex h-screen bg-background">
         <TaskSidebar 
+          activeFilter={activeFilter}
+          onFilterChange={setActiveFilter}
+          taskStats={getTaskStats()}
           tasks={tasks}
           onAddTask={() => setIsFormOpen(true)}
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          onOpenSettings={() => setIsSettingsOpen(true)}
-          onOpenShareModal={() => setIsShareModalOpen(true)}
         />
         
         <div className="flex-1 flex flex-col">
           <TaskList 
             tasks={tasks}
-            onEditTask={handleEditTask}
-            onDeleteTask={handleDeleteTask}
-            onStatusChange={handleStatusChange}
+            onTaskEdit={handleEditTask}
+            onTaskDelete={handleDeleteTask}
+            onTaskToggle={handleTaskToggle}
+            filter={activeFilter}
           />
         </div>
 
         {isFormOpen && (
           <TaskForm
+            isOpen={isFormOpen}
             task={editingTask}
             onSubmit={handleFormSubmit}
-            onCancel={() => {
+            onClose={() => {
               setIsFormOpen(false);
               setEditingTask(null);
             }}

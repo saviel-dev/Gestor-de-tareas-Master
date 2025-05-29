@@ -5,16 +5,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Task } from "./TaskList";
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  priority: "low" | "medium" | "high";
+  dueDate?: string;
+  completed: boolean;
+  createdAt: string;
+}
 
 interface TaskFormProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (task: Omit<Task, 'id' | 'createdAt'>) => void;
-  editingTask?: Task | null;
+  task?: Task | null;
 }
 
-export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormProps) {
+export function TaskForm({ isOpen, onClose, onSubmit, task }: TaskFormProps) {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -24,13 +33,13 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
   });
 
   useEffect(() => {
-    if (editingTask) {
+    if (task) {
       setFormData({
-        title: editingTask.title,
-        description: editingTask.description || '',
-        priority: editingTask.priority,
-        dueDate: editingTask.dueDate || '',
-        completed: editingTask.completed
+        title: task.title,
+        description: task.description || '',
+        priority: task.priority,
+        dueDate: task.dueDate || '',
+        completed: task.completed
       });
     } else {
       setFormData({
@@ -41,7 +50,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
         completed: false
       });
     }
-  }, [editingTask, isOpen]);
+  }, [task, isOpen]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,7 +75,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-ms-gray-200 dark:border-ms-gray-700">
           <h2 className="text-lg font-semibold text-ms-gray-900 dark:text-ms-gray-100">
-            {editingTask ? 'Editar tarea' : 'Nueva tarea'}
+            {task ? 'Editar tarea' : 'Nueva tarea'}
           </h2>
           <Button
             variant="ghost"
@@ -156,7 +165,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, editingTask }: TaskFormPro
               type="submit"
               className="flex-1 bg-ms-blue-500 hover:bg-ms-blue-600 text-white"
             >
-              {editingTask ? 'Actualizar' : 'Crear tarea'}
+              {task ? 'Actualizar' : 'Crear tarea'}
             </Button>
           </div>
         </form>
